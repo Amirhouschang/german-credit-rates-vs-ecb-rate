@@ -13,14 +13,11 @@ Analyse der Effektivzinssätze für Konsumenten- und Unternehmenskredite (Neuges
 ### Notebook: Zinsentwicklung über Zeit
 ![Zinsentwicklung](images/notebook_zinsentwicklung.png)
 
-
 ### Notebook: Korrelation mit dem Leitzins
 ![Korrelation](images/notebook_korrelation_heatmap.png)
 
-
 ### Dashboard: Zinsentwicklung über Zeit
 ![Dashboard Zeitverlauf](images/dashboard_zinsentwicklung.png)
-
 
 ### Dashboard: Zinsspanne
 ![Dashboard Zinsspanne](images/dashboard_zinsspanne.png)
