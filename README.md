@@ -2,7 +2,7 @@
 
 Analyse der Effektivzinssätze für Konsumenten- und Unternehmenskredite (Neugeschäft) in Deutschland im Vergleich zu den EZB-Leitzinsen, seit Januar 2020. Datenbasis: offizielle Bundesbank-Zeitreihen, automatisiert über die SDMX-REST-API abgerufen.
 
-**Live-Demo:** _[Link folgt nach Deployment auf Streamlit Community Cloud]_
+**Live-Demo:** [german-credit-rates-vs-ecb-rate.streamlit.app](https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app/)
 
 **Hinweis:** Dieses Projekt wurde mit Unterstützung von KI (Claude) entwickelt — bei Code-Struktur, Debugging und Dokumentation. Ich verstehe die Logik, kann sie erklären und weiterentwickeln, sehe mich aber nicht als professionellen Software-Entwickler. Mein Fokus liegt auf Datenanalyse.
 
