@@ -1,0 +1,9 @@
+﻿Zinsart_ID;Zinsart_Code;Kategorie;Laufzeit
+1;Konsum_gesamt;Konsumkredit;gesamt
+2;Konsum_bis_1J;Konsumkredit;bis 1 Jahr
+3;Konsum_1_bis_5J;Konsumkredit;1 bis 5 Jahre
+4;Konsum_ueber_5J;Konsumkredit;über 5 Jahre
+5;Unternehmen_gesamt;Unternehmenskredit;gesamt
+6;Hauptrefinanzierungssatz;Leitzins;Hauptrefinanzierung
+7;Einlagefazilitaet;Leitzins;Einlagefazilität
+8;Spitzenrefinanzierung;Leitzins;Spitzenrefinanzierung
