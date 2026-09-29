@@ -1,10 +1,10 @@
 # Kreditzinsen in Deutschland vs. EZB-Leitzins
 
-Analyse der Effektivzinssätze für Konsumenten- und Unternehmenskredite (Neugeschäft) in Deutschland im Vergleich zu den EZB-Leitzinsen, seit Januar 2020. Datenbasis: offizielle Bundesbank-Zeitreihen, automatisiert über die SDMX-REST-API abgerufen.
+Analyse der Kreditzinsen für Konsumenten- und Unternehmenskredite (Neugeschäft) in Deutschland im Vergleich zu den EZB-Leitzinsen, Zeitraum Januar 2020 bis September 2026 (Kreditzinsen bis Juli 2026). Datenbasis: offizielle Bundesbank-Zeitreihen, automatisiert über die SDMX-REST-API abgerufen.
 
-**Live-Demo:** [german-credit-rates-vs-ecb-rate.streamlit.app](https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app/)
+**Live-Demo:** [https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app](https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app/)
 
-**Hinweis:** Dieses Projekt wurde mit Unterstützung von KI (Claude) entwickelt — bei Code-Struktur, Debugging und Dokumentation. Ich verstehe die Logik, kann sie erklären und weiterentwickeln, sehe mich aber nicht als professionellen Software-Entwickler. Mein Fokus liegt auf Datenanalyse.
+**Hinweis:** Dieses Projekt wurde mit Unterstützung von KI (Claude) entwickelt — bei Code-Struktur, Debugging und Dokumentation. Ich sehe mich nicht als professionellen Software-Entwickler. Mein Fokus liegt auf Datenanalyse.
 
 ---
 
@@ -45,7 +45,7 @@ Analyse der Effektivzinssätze für Konsumenten- und Unternehmenskredite (Neuges
 | Einlagefazilität | BBIN1 | M.D0.ECB.ECBFAC.EUR.ME |
 | Spitzenrefinanzierung | BBIN1 | M.D0.ECB.ECBREF.EUR.ME |
 
-Alle Werte sind Effektivzinssätze im Neugeschäft (keine Bestandszinsen).
+Die fünf Kreditzinsreihen betreffen das Neugeschäft (keine Bestandskredite). Alle Reihen sind Monatswerte.
 
 ---
 
@@ -60,19 +60,22 @@ Jupyter Notebook  (Abruf, Bereinigung, EDA)
         ▼
 Star-Schema-Export (3 CSVs, Keys statt breiter Tabelle)
         │
-        ├──▶ Streamlit-Dashboard (dashboard.py)
-        └──▶ Power BI (optional, gleiche CSVs)
+        ▼
+Streamlit-Dashboard (dashboard.py)
 ```
 
 ## Repo-Struktur
 
 ```
-├── bundesbank_kreditzinsen_analysis.ipynb   # Datenabruf + EDA
+├── bundesbank_kreditzinsen_analysis.ipynb   # Datenabruf + EDA, exportiert die 3 Star-Schema-CSVs
 ├── dashboard.py                             # Streamlit-Dashboard
+├── requirements.txt                         # Abhängigkeiten des Dashboards
 ├── dim_zeit.csv                             # Dimension: Zeit
 ├── dim_zinsart.csv                          # Dimension: Zinsart
 ├── fact_zinssaetze.csv                      # Faktentabelle
-├── images/                                  # Screenshots für README
+├── kreditzinsen_leitzins_seit_2020.csv      # breite Tabelle mit denselben Werten (wird weder vom
+│                                            #   aktuellen Notebook erzeugt noch vom Dashboard verwendet)
+├── images/                                  # Screenshots für die README
 └── README.md
 ```
 
@@ -80,11 +83,13 @@ Star-Schema-Export (3 CSVs, Keys statt breiter Tabelle)
 
 ## Datenmodell (Star-Schema)
 
-Statt einer breiten Tabelle: eine Fact-Tabelle + zwei Dimensionstabellen, verbunden über Surrogate Keys. Kein Power-Query-Nachbearbeiten nötig — CSVs importieren, Beziehungen über die Keys herstellen.
+Statt einer breiten Tabelle: eine Fact-Tabelle + zwei Dimensionstabellen, verbunden über die Schlüsselspalten `Zeit_ID` und `Zinsart_ID`. Das Notebook bezeichnet das Schema als „Star-Schema für Power BI“; ein Power-BI-Bericht ist nicht Teil dieses Repos.
 
-- **Dim_Zeit** (81 Zeilen): eine Zeile pro Monat, Key `Zeit_ID` (Format `JJJJMM`)
-- **Dim_Zinsart** (8 Zeilen): eine Zeile pro Zinsreihe, mit `Kategorie` (Konsumkredit / Unternehmenskredit / Leitzins) und `Laufzeit`
-- **Fact_Zinssaetze** (638 Zeilen): eine Zeile pro (Monat, Zinsart), nur tatsächlich vorhandene Werte — keine künstlichen Leerzeilen für noch nicht veröffentlichte Monate
+- **Dim_Zeit** (81 Zeilen): eine Zeile pro Monat (01/2020–09/2026), Key `Zeit_ID` (Format `JJJJMM`), weitere Spalten: `Datum`, `Jahr`, `Quartal`, `Monat`, `Jahr_Monat`
+- **Dim_Zinsart** (8 Zeilen): eine Zeile pro Zinsreihe, Key `Zinsart_ID`, weitere Spalten: `Zinsart_Code`, `Kategorie` (Konsumkredit / Unternehmenskredit / Leitzins), `Laufzeit`
+- **Fact_Zinssaetze** (638 Zeilen): eine Zeile pro (Monat, Zinsart) mit `Zinssatz` — nur tatsächlich vorhandene Werte. Von den 648 möglichen Kombinationen (81 × 8) fehlen 10: die fünf Kreditzinsreihen für 08/2026 und 09/2026.
+
+CSV-Format: Trennzeichen `;`, Dezimalkomma, UTF-8 mit BOM.
 
 ---
 
@@ -97,7 +102,7 @@ pip install pandas numpy matplotlib requests jupyter streamlit plotly
 # Notebook ausführen (ruft Daten live von der Bundesbank ab, exportiert die 3 CSVs)
 jupyter lab bundesbank_kreditzinsen_analysis.ipynb
 
-# Dashboard starten (braucht die 3 CSVs im selben Ordner)
+# Dashboard starten (im Repo-Ordner ausführen, dort werden die 3 CSVs gelesen)
 streamlit run dashboard.py
 ```
 
@@ -105,19 +110,21 @@ streamlit run dashboard.py
 
 ## Finanzbericht: Kernergebnisse
 
-Alle Zahlen unten sind direkt aus den Bundesbank-Daten berechnet (Stand der Kreditzins-Zeitreihen: Juli 2026, Leitzins-Zeitreihen: September 2026 — die Bundesbank veröffentlicht Kreditzinsen mit ca. 2 Monaten Verzug).
+Alle Zahlen unten sind aus den im Repo liegenden CSV-Dateien (Bundesbank-Daten) berechnet. Die Kreditzinsreihen reichen bis 07/2026, die Leitzinsreihen bis 09/2026. Ein erneuter Notebook-Lauf holt den dann aktuellen Datenstand und kann davon abweichen.
 
-### Leitzinszyklus seit 2020
+### Leitzinszyklus seit 2020 (Hauptrefinanzierungssatz)
 
-- **01/2020–06/2022**: Hauptrefinanzierungssatz konstant bei 0,00 % (Nullzinsphase)
-- **07/2022**: erste Erhöhung (+0,50 pp) — Beginn der Zinswende
-- **09/2023**: Höchststand bei 4,50 %
-- **06/2024–06/2025**: Zinssenkungszyklus, 4,50 % → 2,15 %
-- **06/2025–05/2026**: Plateau bei 2,15 %
-- **seit 06/2026**: erneuter leichter Anstieg, aktuell (09/2026) 2,65 %
-- Insgesamt 20 Monate mit Leitzinsänderungen, 18 unterschiedliche Zinsniveaus seit 2020
+- **01/2020–06/2022**: konstant 0,00 % (die Einlagefazilität lag in dieser Zeit bei −0,50 %)
+- **07/2022**: erste Erhöhung (+0,50 pp)
+- **09/2023–05/2024**: Höchststand bei 4,50 %
+- **06/2024–06/2025**: acht Senkungen, von 4,50 % auf 2,15 %
+- **06/2025–05/2026**: konstant 2,15 %
+- **06/2026–09/2026**: Anstieg auf 2,40 % (06/2026) und 2,65 % (09/2026)
+- Insgesamt 20 Änderungen zwischen aufeinanderfolgenden Monatswerten (12 Erhöhungen, 8 Senkungen); 18 unterschiedliche Zinsniveaus seit 2020
 
 ### Zusammenhang Kreditzins ↔ Leitzins (Korrelation, Pearson r)
+
+Basis: die 79 Monate 01/2020–07/2026, in denen alle Reihen Werte haben.
 
 | Reihe | r (vs. Hauptrefinanzierungssatz) |
 |---|---|
@@ -127,16 +134,20 @@ Alle Zahlen unten sind direkt aus den Bundesbank-Daten berechnet (Stand der Kred
 | Konsumkredit, gesamt | 0,906 |
 | Konsumkredit, bis 1 Jahr | **0,077** |
 
-Unternehmenskredite folgen dem Leitzins nahezu 1:1. Konsumkredite mit längerer Zinsbindung folgen ihm ebenfalls stark, aber mit spürbar geringerer Kopplung. Konsumkredite mit Zinsbindung bis 1 Jahr sind mit dem Leitzins praktisch unkorreliert — dieser Befund ist auffällig, wird hier aber nur berichtet, nicht kausal erklärt (dafür reichen die vorliegenden Daten nicht aus).
+- Unternehmenskredit: r = 0,993. Die Steigung der Regressionsgeraden beträgt 0,87 — im Schnitt geht ein Prozentpunkt mehr Leitzins mit 0,87 Prozentpunkten höherem Unternehmenskreditzins einher.
+- Konsumkredit, gesamt: r = 0,906, Steigung 0,69.
+- Konsumkredit, 1–5 Jahre und über 5 Jahre: r = 0,911 bzw. 0,932.
+- Konsumkredit, bis 1 Jahr: r = 0,077, also praktisch kein linearer Zusammenhang mit dem Leitzins. Dieser Befund ist auffällig, wird hier aber nur berichtet, nicht kausal erklärt (dafür reichen die vorliegenden Daten nicht aus).
 
-### Zinsspanne (Kreditzins minus Leitzins)
+### Zinsspanne (Kreditzins minus Hauptrefinanzierungssatz, gleicher Monat)
 
 | | 01/2020 | 07/2026 | Minimum | Maximum |
 |---|---|---|---|---|
 | Konsumkredit, gesamt | 6,07 pp | 6,18 pp | 3,77 pp (03/2024) | 6,40 pp (01/2026) |
 | Unternehmenskredit, gesamt | 1,24 pp | 1,38 pp | 0,56 pp (02/2024) | 2,19 pp (06/2022) |
 
-Die Marge bei Konsumkrediten liegt durchgehend beim 4- bis 5-Fachen der Marge bei Unternehmenskrediten. Beide Margen sind 07/2026 in etwa auf dem Niveau von 01/2020 — dazwischen aber mit deutlichen Schwankungen, am engsten jeweils Anfang/Mitte 2024.
+- Die Spanne ist 07/2026 bei Konsumkrediten um 0,11 pp und bei Unternehmenskrediten um 0,14 pp höher als 01/2020. Dazwischen schwankt sie deutlich; am engsten war sie im Februar (Unternehmenskredit) bzw. März 2024 (Konsumkredit).
+- Die Konsumkredit-Spanne war in allen 79 Monaten größer als die Unternehmenskredit-Spanne, im Median 4,61-mal so groß (Minimum 2,74-mal in 06/2022, Maximum 7,25-mal in 02/2024).
 
 ### Aktuelle Werte
 
@@ -151,15 +162,16 @@ Die Marge bei Konsumkrediten liegt durchgehend beim 4- bis 5-Fachen der Marge be
 ### Einschränkungen
 
 - Korrelation belegt keine Kausalität — die Analyse ist deskriptiv, kein ökonometrisches Modell
-- Kreditzins-Zeitreihen für 08/2026 und 09/2026 lagen zum Zeitpunkt des Abrufs noch nicht vor (Bundesbank-Veröffentlichungsverzug)
-- Unternehmenskredite liegen nur als Gesamtwert vor, keine Aufteilung nach Laufzeit (im Gegensatz zu Konsumkrediten)
-- Effektivzinssätze im Neugeschäft — keine Aussage über Bestandskredite oder individuelle Kreditkonditionen
+- Die Kreditzinsreihen enthalten keine Werte für 08/2026 und 09/2026 (im Abruf nicht vorhanden); die Leitzinsreihen reichen bis 09/2026
+- Für Unternehmenskredite wird nur die Gesamtreihe verwendet (keine Aufteilung nach Laufzeit), für Konsumkredite zusätzlich drei Reihen nach Zinsbindung
+- Die Reihe „Konsumkredit, gesamt“ hat im Series Key an einer Stelle den Buchstaben `C`, die übrigen vier Kreditreihen dort `R`. Laut ECB-Codeliste der MFI-Zinsstatistik steht `C` für den effektiven Jahreszins inkl. Kosten (APRC) und `R` für den vereinbarten Jahreszins bzw. eng definierten Effektivzins (AAR/NDER). Die Gesamtreihe misst daher möglicherweise nicht exakt dasselbe Zinsmaß wie die Reihen nach Zinsbindung; Vergleiche zwischen beiden sind vorsichtig zu lesen.
+- Neugeschäft — keine Aussage über Bestandskredite oder individuelle Kreditkonditionen
 
 ---
 
 ## Tech Stack
 
-Python · pandas · NumPy · Matplotlib · Jupyter · Streamlit · Plotly
+Python · pandas · NumPy · Matplotlib · requests · Jupyter · Streamlit · Plotly
 
 ## Autor
 
