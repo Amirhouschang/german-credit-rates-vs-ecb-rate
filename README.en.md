@@ -12,6 +12,8 @@ Analysis of interest rates on consumer and corporate loans (new business) in Ger
 
 ## Screenshots
 
+*The notebook and its screenshots are in German because the project was originally built in German; the English README and the bilingual dashboard (with English screenshots) were added later.*
+
 ### Notebook: Interest rate development over time
 ![Interest rate development](images/notebook_zinsentwicklung.png)
 
