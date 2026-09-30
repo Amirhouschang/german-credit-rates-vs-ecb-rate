@@ -1,5 +1,7 @@
 # Kreditzinsen in Deutschland vs. EZB-Leitzins
 
+**Sprachen:** Deutsch · [English](README.en.md)
+
 Analyse der Kreditzinsen für Konsumenten- und Unternehmenskredite (Neugeschäft) in Deutschland im Vergleich zu den EZB-Leitzinsen, Zeitraum Januar 2020 bis September 2026 (Kreditzinsen bis Juli 2026). Datenbasis: offizielle Bundesbank-Zeitreihen, automatisiert über die SDMX-REST-API abgerufen.
 
 **Live-Demo:** [https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app](https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app/)
@@ -76,7 +78,8 @@ Streamlit-Dashboard (dashboard.py)
 ├── kreditzinsen_leitzins_seit_2020.csv      # breite Tabelle mit denselben Werten (wird weder vom
 │                                            #   aktuellen Notebook erzeugt noch vom Dashboard verwendet)
 ├── images/                                  # Screenshots für die README
-└── README.md
+├── README.md                                # deutsche Version (diese Datei)
+└── README.en.md                             # englische Version
 ```
 
 ---

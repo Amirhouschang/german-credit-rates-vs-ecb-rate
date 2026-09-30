@@ -57,6 +57,7 @@ df = load_data()
 
 st.title("Kreditzinsen in Deutschland vs. EZB-Leitzins")
 st.caption("Datenquelle: Bundesbank SDMX Web Service — Neugeschäft, seit 2020")
+st.write("")  # eine Leerzeile zwischen Datenquelle und "Aktuelle Eckwerte"
 
 
 # ------------------------------------------------------------
@@ -90,6 +91,7 @@ df_filtered = df[
 # 4. KPI-Kacheln (aktuelle Eckwerte)
 # ------------------------------------------------------------
 st.subheader("Aktuelle Eckwerte")
+st.write("")  # eine Leerzeile, damit die Karten nicht an der Überschrift kleben
 
 neueste_werte = df_filtered.sort_values("Datum").groupby("Zinsart_Code")["Zinssatz"].last()
 neuestes_datum = df_filtered["Datum"].max()
@@ -98,8 +100,19 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Leitzins (Hauptrefinanzierung)", format_wert(neueste_werte.get("Hauptrefinanzierungssatz", np.nan)))
 col2.metric("Konsumkredit (gesamt)", format_wert(neueste_werte.get("Konsum_gesamt", np.nan)))
 col3.metric("Unternehmenskredit (gesamt)", format_wert(neueste_werte.get("Unternehmen_gesamt", np.nan)))
-if pd.notna(neuestes_datum):
-    st.caption(f"Stand: {neuestes_datum:%m/%Y}")
+letzte_daten = df_filtered.groupby("Zinsart_Code")["Datum"].max()
+
+
+def stand(code: str) -> str:
+    d = letzte_daten.get(code)
+    return f"{d:%m/%Y}" if pd.notna(d) else "–"
+
+
+st.caption(
+    f"Stand: Leitzins {stand('Hauptrefinanzierungssatz')}, "
+    f"Konsumkredit {stand('Konsum_gesamt')}, "
+    f"Unternehmenskredit {stand('Unternehmen_gesamt')}"
+)
 
 st.divider()
 
@@ -157,7 +170,10 @@ st.divider()
 # ------------------------------------------------------------
 # 7. Aktuellster Zinssatz je Zinsart
 # ------------------------------------------------------------
-st.subheader("Aktuellster Zinssatz je Zinsart")
+st.subheader(
+    f"Aktuellster Zinssatz je Zinsart "
+    f"(Kredite {stand('Konsum_gesamt')}, Leitzins {stand('Hauptrefinanzierungssatz')})"
+)
 
 letzter = (
     df_filtered.sort_values("Datum")
