@@ -4,7 +4,7 @@
 
 Analysis of interest rates on consumer and corporate loans (new business) in Germany compared with the ECB key interest rates, period January 2020 to September 2026 (loan rates up to July 2026). Data basis: official Bundesbank time series, retrieved automatically via the SDMX REST API.
 
-**Live demo:** [https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app](https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app/)
+**Live demo:** [https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app](https://german-credit-rates-vs-ecb-rate-ywntxevqbxdtuaskipepzy.streamlit.app/?lang=en) (opens in English; language switch in the sidebar)
 
 **Note:** This project was developed with the support of AI (Claude) — for code structure, debugging and documentation. I do not see myself as a professional software developer. My focus is data analysis.
 
@@ -23,12 +23,12 @@ Analysis of interest rates on consumer and corporate loans (new business) in Ger
 ---
 
 ### Dashboard: Interest rate development over time
-![Dashboard time series](images/dashboard_zinsentwicklung.png)
+![Dashboard time series](images/dashboard_zinsentwicklung_en.png)
 
 ---
 
 ### Dashboard: Interest rate spread
-![Dashboard spread](images/dashboard_zinsspanne.png)
+![Dashboard spread](images/dashboard_zinsspanne_en.png)
 
 ---
 
