@@ -178,6 +178,8 @@ Basis: the 79 months 01/2020–07/2026 in which all series have values.
 
 Python · pandas · NumPy · Matplotlib · requests · Jupyter · Streamlit · Plotly
 
-## Author
+---
 
-Amir — [GitHub](https://github.com/Amirhouschang)
+## Rights
+
+© 2026 Amirhoushang Rahmannejad. All rights reserved. You are welcome to read and review this project. Copying, modifying or redistributing it requires my written permission.
