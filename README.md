@@ -176,6 +176,8 @@ Basis: die 79 Monate 01/2020–07/2026, in denen alle Reihen Werte haben.
 
 Python · pandas · NumPy · Matplotlib · requests · Jupyter · Streamlit · Plotly
 
-## Autor
+---
 
-Amir — [GitHub](https://github.com/Amirhouschang)
+## Rechte
+
+© 2026 Amirhoushang Rahmannejad. Alle Rechte vorbehalten. Ansehen und Prüfen ist ausdrücklich erwünscht. Kopieren, Ändern oder Weiterverbreiten nur mit meiner schriftlichen Erlaubnis.
